@@ -9,8 +9,6 @@ newMessage = False
 
 class ScrollBar:
 
-    def __init__(self):
-        print("foo")
 
     @staticmethod
     def runGUI(port, message, **ipaddr):

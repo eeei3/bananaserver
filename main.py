@@ -1,9 +1,9 @@
-from tkinter import *
-from PIL import ImageTk, Image
-from tkinter.font import Font
+from multiprocessing import Process
 import random
 from createbananaserver import ScrollBar
-from joinbananaserver import joinBananaServer
+from tkinter import *
+from joinbananaservertest import *
+from PIL import ImageTk, Image
 
 
 def error(message):
@@ -15,15 +15,17 @@ def error(message):
     err.title("A error has occured")
     err.mainloop()
 
+
 def titlepicker():
+
     randomNumber = random.randint(0,9)
     nameList = ["Banana Server", "Server for Banana's!", "Bnana Server", "lol", "Not a Anomaly!",
-                "We (I mean you) are not affiliated with Banana Server", "Unlucky...", "Banana Serer", "Linux Rocks!",
+                "We (I mean you) are not affiliated with Banana Server", "2chtubo", "Banana Serer", "Linux Rocks!",
                 "Be sure to like and subscribe!"]
     return nameList[randomNumber]
 
-def createBananaServer():
 
+def createBananaServer():
 
     def bananapeel():
         bananaport = port.get()
@@ -33,7 +35,7 @@ def createBananaServer():
         ipaddr = internetprotocoladdress.get()
 
         try:
-            ScrollBar.runGUI(bananaport, bananamessage, ip=ipaddr)
+            ScrollBar.runGUI(bananaport, bananamessage, ipaddr)
         except Exception as e:
             error(e)
 
@@ -84,8 +86,11 @@ def main(title):
         username = uname.get()
         IPaddress = ipaddr.get()
         port = port2join.get()
-        joinBananaServer(uname, port, IPaddress)
-        return 0
+        if IPaddress == "":
+            IPaddress = "localhost"
+        print(username, port, IPaddress)
+        a = Process(target=server_comms.connection, args=(username, port, IPaddress))
+        a.run()
 
     root = Tk()
 
@@ -140,9 +145,8 @@ def main(title):
     messagelabel = Label(root, text="Message to send after successful connection", font=("MS Comic Sans", "12"))
     messagelabel.place(relx=0.10, rely=0.85)
 
-    joinbutton = Button(joinframe, text="Join Banana Server!")
+    joinbutton = Button(joinframe, command = joincommand, text="Join Banana Server!")
     joinbutton.pack()
-
 
     root.title(title)
     root.maxsize(400, 700)
